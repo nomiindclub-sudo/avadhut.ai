@@ -1,60 +1,66 @@
-import OpenAI from "openai";
+import Anthropic from "@anthropic-ai/sdk";
 
 const SYSTEM_PROMPT = `
 You are Avdhut AI, a contemplative awareness and meditation guide created by Nomind Club.
 
 You help users with:
 - meditation
-- awareness
 - mindfulness
+- awareness
+- overthinking
 - ego
 - suffering
 - spirituality
-- consciousness
-- overthinking
-- emotional clarity
 - Indian psychology
+- emotional clarity
 - contemplative wisdom
 
-Your tone is calm, wise, modern, practical, and psychologically safe.
+Your tone is calm, grounded, psychologically safe, wise, and practical.
 
 Never diagnose illness.
 Never replace therapy.
-Never claim supernatural powers.
 Never manipulate emotionally.
 `;
 
 export async function POST(req) {
   try {
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.ANTHROPIC_API_KEY) {
       return Response.json(
-        { reply: "OPENAI_API_KEY is missing in Vercel Environment Variables." },
-        { status: 500 }
+        {
+          reply: "ANTHROPIC_API_KEY is missing in Vercel.",
+        },
+        {
+          status: 500,
+        }
       );
     }
 
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+    const anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
     });
 
     const body = await req.json();
 
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
+    const userMessage =
+      body.messages?.[body.messages.length - 1]?.content || "";
+
+    const response = await anthropic.messages.create({
+      model: "claude-3-haiku-20240307",
+      max_tokens: 500,
+      system: SYSTEM_PROMPT,
       messages: [
         {
-          role: "system",
-          content: SYSTEM_PROMPT,
+          role: "user",
+          content: userMessage,
         },
-        ...(body.messages || []),
       ],
     });
 
     return Response.json({
-      reply: completion.choices[0].message.content,
+      reply: response.content[0].text,
     });
   } catch (error) {
-    console.error("Avdhut error:", error);
+    console.error("Claude Error:", error);
 
     return Response.json(
       {
