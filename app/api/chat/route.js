@@ -1,9 +1,5 @@
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 const SYSTEM_PROMPT = `
 You are Avdhut AI, a contemplative awareness and meditation guide created by Nomind Club.
 
@@ -30,9 +26,18 @@ Never manipulate emotionally.
 
 export async function POST(req) {
   try {
-    const body = await req.json();
+    if (!process.env.OPENAI_API_KEY) {
+      return Response.json(
+        { reply: "OPENAI_API_KEY is missing in Vercel Environment Variables." },
+        { status: 500 }
+      );
+    }
 
-    const messages = body.messages || [];
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    const body = await req.json();
 
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
@@ -41,7 +46,7 @@ export async function POST(req) {
           role: "system",
           content: SYSTEM_PROMPT,
         },
-        ...messages,
+        ...(body.messages || []),
       ],
     });
 
@@ -49,11 +54,11 @@ export async function POST(req) {
       reply: completion.choices[0].message.content,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Avdhut error:", error);
 
     return Response.json(
       {
-        error: "Something went wrong with Avdhut AI.",
+        reply: "Something went wrong with Avdhut AI.",
       },
       {
         status: 500,
