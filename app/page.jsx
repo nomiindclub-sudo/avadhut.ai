@@ -8,7 +8,7 @@ export default function Home() {
     {
       role: "assistant",
       content:
-        "I am Avadhut AI — a contemplative awareness companion by Nomind Club.",
+        "I am Avdhut AI — a contemplative awareness companion by Nomind Club.",
     },
   ]);
 
@@ -56,7 +56,7 @@ export default function Home() {
       <section className="hero">
         <div className="logoCircle"></div>
 
-        <h1>Avadhut AI</h1>
+        <h1>Avdhut AI</h1>
 
         <p>
           Awareness • Meditation • Contemplative Intelligence
@@ -79,7 +79,7 @@ export default function Home() {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask Avadhut..."
+            placeholder="Ask Avdhut..."
           />
 
           <button type="submit">Send</button>
