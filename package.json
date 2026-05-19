@@ -1,5 +1,5 @@
 {
-  "name": "avdhoot-ai",
+  "name": "avdhut-ai",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -8,9 +8,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.3",
     "next": "14.2.16",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "openai": "^4.67.3"
+    "react-dom": "^18.3.1"
   }
 }
