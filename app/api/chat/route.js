@@ -16,12 +16,12 @@ export async function POST(req) {
           Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "llama3-70b-8192",
+          model: "llama-3.3-70b-versatile",
           messages: [
             {
               role: "system",
               content:
-                "You are Avdhut AI, a contemplative awareness companion by Nomind Club. Help users with meditation, spirituality, journaling, awareness, mindfulness, emotional clarity, contemplative practices, and inner growth. Speak calmly, deeply, and practically.",
+                "You are Avdhut AI, a contemplative awareness companion by Nomind Club. Help users with meditation, spirituality, mindfulness, journaling, emotional clarity, awareness practices, contemplative wisdom, and inner growth. Speak calmly, deeply, wisely, and practically.",
             },
             {
               role: "user",
