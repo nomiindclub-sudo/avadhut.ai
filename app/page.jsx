@@ -42,21 +42,6 @@ const practices = [
   },
 
   {
-    title: "Vipassana",
-    teacher: "Buddhist Tradition",
-    minutes: 20,
-    path: "Insight",
-    intro: "Observe sensations with equanimity.",
-    steps: [
-      "Bring awareness to the body.",
-      "Observe sensations calmly.",
-      "Do not react.",
-      "Notice everything changing.",
-      "Remain balanced."
-    ]
-  },
-
-  {
     title: "Zazen",
     teacher: "Zen Tradition",
     minutes: 15,
@@ -69,120 +54,64 @@ const practices = [
       "Do not control experience.",
       "Rest in presence."
     ]
-  },
-
-  {
-    title: "Raja Yoga Dharana",
-    teacher: "Swami Vivekananda",
-    minutes: 9,
-    path: "Concentration",
-    intro: "Train attention through one pointedness.",
-    steps: [
-      "Choose one object of focus.",
-      "Keep attention there.",
-      "Return whenever distracted.",
-      "Remain calm and steady.",
-      "End in silence."
-    ]
-  },
-
-  {
-    title: "Mantra Japa",
-    teacher: "Yogic Tradition",
-    minutes: 12,
-    path: "Mantra",
-    intro: "Sacred sound repetition meditation.",
-    steps: [
-      "Choose a mantra.",
-      "Repeat internally.",
-      "Synchronize with breathing.",
-      "Return whenever distracted.",
-      "Rest in silence afterward."
-    ]
-  },
-
-  {
-    title: "Yoga Nidra",
-    teacher: "Tantric Yoga",
-    minutes: 20,
-    path: "Relaxation",
-    intro: "Conscious deep relaxation.",
-    steps: [
-      "Lie down comfortably.",
-      "Relax each body part.",
-      "Remain aware.",
-      "Observe breath naturally.",
-      "Allow deep relaxation."
-    ]
-  },
-
-  {
-    title: "Vigyan Bhairava",
-    teacher: "Kashmir Shaivism",
-    minutes: 11,
-    path: "Direct Awareness",
-    intro: "Rest in the pause between breaths.",
-    steps: [
-      "Observe inhale.",
-      "Notice the pause.",
-      "Observe exhale.",
-      "Rest in the gap.",
-      "Remain as awareness."
-    ]
-  },
-
-  {
-    title: "Metta Bhavana",
-    teacher: "Loving Kindness",
-    minutes: 10,
-    path: "Compassion",
-    intro: "Cultivate compassion and goodwill.",
-    steps: [
-      "Bring awareness to the heart.",
-      "Repeat: May I be peaceful.",
-      "Extend kindness to others.",
-      "Rest in compassion."
-    ]
   }
 ];
 
 export default function Home() {
 
-  const [tab, setTab] = useState("home");
-
-  const [openedPractice, setOpenedPractice] =
-    useState(null);
-
-  const [journal, setJournal] =
-    useState("");
-
-  const [entries, setEntries] =
-    useState([]);
-
-  const [secondsLeft, setSecondsLeft] =
-    useState(0);
-
-  const [running, setRunning] =
+  const [entered, setEntered] =
     useState(false);
 
-  const [sessions, setSessions] =
-    useState(0);
+  const [tab, setTab] =
+    useState("home");
 
-  const [input, setInput] =
+  const [openedPractice,
+    setOpenedPractice] =
+    useState(null);
+
+  const [journal,
+    setJournal] =
     useState("");
 
-  const [messages, setMessages] =
+  const [entries,
+    setEntries] =
+    useState([]);
+
+  const [secondsLeft,
+    setSecondsLeft] =
+    useState(0);
+
+  const [running,
+    setRunning] =
+    useState(false);
+
+  const [sessions,
+    setSessions] =
+    useState(0);
+
+  const [input,
+    setInput] =
+    useState("");
+
+  const [messages,
+    setMessages] =
     useState([START_MESSAGE]);
 
   useEffect(() => {
 
-    const savedEntries = JSON.parse(
-      localStorage.getItem("journal") || "[]"
-    );
+    const savedEntries =
+      JSON.parse(
+        localStorage.getItem(
+          "journal"
+        ) || "[]"
+      );
 
-    const savedSessions = Number(
-      localStorage.getItem("sessions") || 0
-    );
+    const savedSessions =
+      Number(
+        localStorage.getItem(
+          "sessions"
+        ) || 0
+      );
 
     setEntries(savedEntries);
 
@@ -192,7 +121,8 @@ export default function Home() {
 
   useEffect(() => {
 
-    if (!openedPractice) return;
+    if (!openedPractice)
+      return;
 
     setSecondsLeft(
       openedPractice.minutes * 60
@@ -206,35 +136,40 @@ export default function Home() {
 
     if (!running) return;
 
-    const timer = setInterval(() => {
+    const timer =
+      setInterval(() => {
 
-      setSecondsLeft((s) => {
+        setSecondsLeft((s) => {
 
-        if (s <= 1) {
+          if (s <= 1) {
 
-          clearInterval(timer);
+            clearInterval(timer);
 
-          setRunning(false);
+            setRunning(false);
 
-          const newSessions =
-            sessions + 1;
+            const newSessions =
+              sessions + 1;
 
-          setSessions(newSessions);
+            setSessions(
+              newSessions
+            );
 
-          localStorage.setItem(
-            "sessions",
-            String(newSessions)
-          );
+            localStorage.setItem(
+              "sessions",
+              String(newSessions)
+            );
 
-          return 0;
-        }
+            return 0;
+          }
 
-        return s - 1;
-      });
+          return s - 1;
 
-    }, 1000);
+        });
 
-    return () => clearInterval(timer);
+      }, 1000);
+
+    return () =>
+      clearInterval(timer);
 
   }, [running, sessions]);
 
@@ -258,22 +193,23 @@ export default function Home() {
 
     try {
 
-      const response = await fetch(
-        "/api/chat",
-        {
-          method: "POST",
+      const response =
+        await fetch(
+          "/api/chat",
+          {
+            method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
 
-          body: JSON.stringify({
-            messages:
-              updatedMessages
-          })
-        }
-      );
+            body: JSON.stringify({
+              messages:
+                updatedMessages
+            })
+          }
+        );
 
       const data =
         await response.json();
@@ -305,13 +241,15 @@ export default function Home() {
 
   function saveJournal() {
 
-    if (!journal.trim()) return;
+    if (!journal.trim())
+      return;
 
     const updated = [
       {
         text: journal,
         date:
-          new Date().toLocaleString()
+          new Date()
+            .toLocaleString()
       },
       ...entries
     ];
@@ -324,23 +262,28 @@ export default function Home() {
     );
 
     setJournal("");
+
   }
 
   function restartTimer() {
 
-    if (!openedPractice) return;
+    if (!openedPractice)
+      return;
 
     setRunning(false);
 
     setSecondsLeft(
-      openedPractice.minutes * 60
+      openedPractice.minutes *
+      60
     );
 
   }
 
   function newChat() {
 
-    setMessages([START_MESSAGE]);
+    setMessages([
+      START_MESSAGE
+    ]);
 
     setInput("");
 
@@ -349,7 +292,8 @@ export default function Home() {
   function editMessage(index) {
 
     setInput(
-      messages[index].content
+      messages[index]
+        .content
     );
 
     const updated = [
@@ -363,12 +307,59 @@ export default function Home() {
   }
 
   const mins = String(
-    Math.floor(secondsLeft / 60)
+    Math.floor(
+      secondsLeft / 60
+    )
   ).padStart(2, "0");
 
   const secs = String(
     secondsLeft % 60
   ).padStart(2, "0");
+
+  if (!entered) {
+
+    return (
+
+      <main className="welcomePage">
+
+        <div className="welcomeCard">
+
+          <div className="brandMark">
+            <div className="ensoCircle"></div>
+          </div>
+
+          <h1>Avdhut AI</h1>
+
+          <p>
+            Awareness • Meditation •
+            Contemplative Intelligence
+          </p>
+
+          <button
+            className="primary"
+            onClick={() =>
+              setEntered(true)
+            }
+          >
+            Continue as Guest
+          </button>
+
+          <button
+            className="secondary bigBtn"
+            onClick={() =>
+              setEntered(true)
+            }
+          >
+            Sign in to save your journey
+          </button>
+
+        </div>
+
+      </main>
+
+    );
+
+  }
 
   return (
 
@@ -409,7 +400,9 @@ export default function Home() {
 
         <button
           onClick={() =>
-            setTab("meditation")
+            setTab(
+              "meditation"
+            )
           }
         >
           Meditation
@@ -417,7 +410,9 @@ export default function Home() {
 
         <button
           onClick={() =>
-            setTab("journal")
+            setTab(
+              "journal"
+            )
           }
         >
           Journal
@@ -425,7 +420,9 @@ export default function Home() {
 
         <button
           onClick={() =>
-            setTab("progress")
+            setTab(
+              "progress"
+            )
           }
         >
           Progress
@@ -444,8 +441,8 @@ export default function Home() {
             </h2>
 
             <p>
-              Explore authentic contemplative
-              methods from different traditions.
+              Explore authentic
+              contemplative methods.
             </p>
 
           </div>
@@ -520,7 +517,9 @@ export default function Home() {
                       <button
                         className="editBtn"
                         onClick={() =>
-                          editMessage(index)
+                          editMessage(
+                            index
+                          )
                         }
                       >
                         ✎
@@ -573,35 +572,43 @@ export default function Home() {
 
           <div className="practiceGrid">
 
-            {practices.map((p) => (
+            {practices.map(
+              (p) => (
 
-              <button
-                key={p.title}
-                className="card practiceCard"
-                onClick={() =>
-                  setOpenedPractice(p)
-                }
-              >
+                <button
+                  key={p.title}
+                  className="card practiceCard"
+                  onClick={() =>
+                    setOpenedPractice(
+                      p
+                    )
+                  }
+                >
 
-                <span className="tag">
-                  {p.path}
-                </span>
+                  <span className="tag">
+                    {p.path}
+                  </span>
 
-                <h3>{p.title}</h3>
+                  <h3>
+                    {p.title}
+                  </h3>
 
-                <small>
-                  {p.teacher}
-                </small>
+                  <small>
+                    {p.teacher}
+                  </small>
 
-                <p>{p.intro}</p>
+                  <p>
+                    {p.intro}
+                  </p>
 
-                <small>
-                  {p.minutes} min
-                </small>
+                  <small>
+                    {p.minutes} min
+                  </small>
 
-              </button>
+                </button>
 
-            ))}
+              )
+            )}
 
           </div>
 
@@ -617,7 +624,9 @@ export default function Home() {
           <button
             className="backButton"
             onClick={() =>
-              setOpenedPractice(null)
+              setOpenedPractice(
+                null
+              )
             }
           >
             ← Back
@@ -630,15 +639,21 @@ export default function Home() {
             </span>
 
             <h2>
-              {openedPractice.title}
+              {
+                openedPractice.title
+              }
             </h2>
 
             <small>
-              {openedPractice.teacher}
+              {
+                openedPractice.teacher
+              }
             </small>
 
             <p>
-              {openedPractice.intro}
+              {
+                openedPractice.intro
+              }
             </p>
 
             <div className="timer">
@@ -650,7 +665,9 @@ export default function Home() {
               <button
                 className="primary"
                 onClick={() =>
-                  setRunning(!running)
+                  setRunning(
+                    !running
+                  )
                 }
               >
                 {running
@@ -660,7 +677,9 @@ export default function Home() {
 
               <button
                 className="secondary"
-                onClick={restartTimer}
+                onClick={
+                  restartTimer
+                }
               >
                 Restart
               </button>
@@ -676,7 +695,10 @@ export default function Home() {
             </h2>
 
             {openedPractice.steps.map(
-              (step, index) => (
+              (
+                step,
+                index
+              ) => (
 
                 <div
                   className="stepCard"
@@ -720,7 +742,9 @@ export default function Home() {
 
           <button
             className="primary"
-            onClick={saveJournal}
+            onClick={
+              saveJournal
+            }
           >
             Save Reflection
           </button>
@@ -728,7 +752,10 @@ export default function Home() {
           <div className="entries">
 
             {entries.map(
-              (entry, index) => (
+              (
+                entry,
+                index
+              ) => (
 
                 <div
                   className="entry"
@@ -789,4 +816,5 @@ export default function Home() {
     </main>
 
   );
+
 }
