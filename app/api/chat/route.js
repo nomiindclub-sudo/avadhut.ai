@@ -3,7 +3,9 @@ export async function POST(req) {
     const body = await req.json();
 
     const userMessage =
-      body.messages?.[body.messages.length - 1]?.content || "";
+      body.messages?.[body.messages.length - 1]?.content ||
+      body.message ||
+      "";
 
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
@@ -19,23 +21,27 @@ export async function POST(req) {
             {
               role: "system",
               content:
-                "You are Avdhut AI, a contemplative awareness companion by Nomind Club. Help users with meditation, awareness, spirituality, mindfulness, emotional clarity, journaling, contemplative wisdom, and self-observation. Speak calmly, wisely, and practically.",
+                "You are Avdhut AI, a contemplative awareness companion by Nomind Club. Help users with meditation, spirituality, journaling, awareness, mindfulness, emotional clarity, contemplative practices, and inner growth. Speak calmly, deeply, and practically.",
             },
             {
               role: "user",
               content: userMessage,
             },
           ],
+          temperature: 0.7,
+          max_tokens: 800,
         }),
       }
     );
 
     const data = await response.json();
 
+    console.log(data);
+
     return Response.json({
       reply:
-        data.choices?.[0]?.message?.content ||
-        "No response from Avdhut AI.",
+        data?.choices?.[0]?.message?.content ||
+        "Avdhut AI could not generate a response.",
     });
   } catch (error) {
     console.error(error);
