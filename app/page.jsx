@@ -1,3 +1,4 @@
+```jsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -7,141 +8,271 @@ const practices = [
   {
     title: "Atma Vichara",
     teacher: "Ramana Maharshi",
-    tradition: "Advaita Vedanta",
-    time: "10 min",
     minutes: 10,
-    path: "Self Inquiry",
-    text: "Trace attention back toward the sense of 'I'.",
-    guide:
-      "Sit silently. Notice any thought that appears. Ask gently: To whom has this thought arisen? Then ask: Who am I? Do not answer intellectually. Let attention return toward the one who is aware.",
+    path: "Advaita",
+    intro: "Direct self-inquiry toward the source of awareness.",
+    steps: [
+      "Sit silently.",
+      "Notice thoughts appearing.",
+      "Ask: To whom has this thought appeared?",
+      "Notice the answer: to me.",
+      "Ask gently: Who am I?",
+      "Rest in awareness instead of answering intellectually.",
+    ],
   },
+
+  {
+    title: "Neti Neti",
+    teacher: "Upanishadic Tradition",
+    minutes: 12,
+    path: "Vedanta",
+    intro: "Recognize what you are not.",
+    steps: [
+      "Observe the body.",
+      "Recognize: I am aware of the body.",
+      "Observe thoughts and emotions.",
+      "Recognize: I am aware of the mind.",
+      "Silently repeat: not this, not this.",
+      "Rest as awareness itself.",
+    ],
+  },
+
   {
     title: "Sakshi Bhava",
-    teacher: "Nisargadatta Maharaj",
-    tradition: "Witness Consciousness",
-    time: "8 min",
+    teacher: "Witness Consciousness",
     minutes: 8,
     path: "Witnessing",
-    text: "Remain as the witnessing presence behind experience.",
-    guide:
-      "Do not fight thoughts. Do not follow them. Simply observe. Thoughts arise and disappear in awareness. Stay as the knowing presence itself.",
+    intro: "Remain as the observer of all experience.",
+    steps: [
+      "Sit quietly.",
+      "Observe the breath.",
+      "Watch thoughts arise and disappear.",
+      "Do not interfere.",
+      "Recognize yourself as the witness.",
+      "Rest in silent observation.",
+    ],
   },
+
   {
     title: "Anapanasati",
     teacher: "Buddha",
-    tradition: "Buddhist Mindfulness",
-    time: "12 min",
     minutes: 12,
     path: "Mindfulness",
-    text: "Observe the natural breath with relaxed awareness.",
-    guide:
-      "Bring attention to the inhale and exhale. Feel the breath naturally. When thoughts arise, notice them gently and return to breathing.",
+    intro: "Mindfulness of breathing.",
+    steps: [
+      "Observe the inhale.",
+      "Observe the exhale.",
+      "When the mind wanders, gently return.",
+      "Feel the breath naturally.",
+      "Observe impermanence in each breath.",
+      "Remain calm and aware.",
+    ],
   },
+
   {
-    title: "Dynamic Witnessing",
-    teacher: "Osho",
-    tradition: "Awareness Meditation",
-    time: "10 min",
+    title: "Vipassana Body Scan",
+    teacher: "Buddhist Tradition",
+    minutes: 20,
+    path: "Insight",
+    intro: "Observe sensations with equanimity.",
+    steps: [
+      "Bring awareness to the head.",
+      "Slowly move attention through the body.",
+      "Observe sensations without reacting.",
+      "Pleasant or unpleasant, remain balanced.",
+      "Notice change in all sensations.",
+      "End with whole-body awareness.",
+    ],
+  },
+
+  {
+    title: "Metta Bhavana",
+    teacher: "Loving Kindness",
     minutes: 10,
-    path: "Catharsis & Witnessing",
-    text: "Allow thoughts and emotions while remaining aware.",
-    guide:
-      "Thoughts may move rapidly. Emotions may arise. Do not suppress anything. Watch all movement like clouds passing through the sky.",
+    path: "Compassion",
+    intro: "Cultivate goodwill toward yourself and others.",
+    steps: [
+      "Bring awareness to the heart.",
+      "Silently repeat: May I be peaceful.",
+      "Extend kindness toward others.",
+      "Include loved ones.",
+      "Include neutral people.",
+      "Rest in compassion.",
+    ],
   },
+
   {
-    title: "Raja Yoga Concentration",
+    title: "Zazen",
+    teacher: "Zen Tradition",
+    minutes: 15,
+    path: "Zen",
+    intro: "Just sitting in direct awareness.",
+    steps: [
+      "Sit upright.",
+      "Let breathing remain natural.",
+      "Do not chase silence.",
+      "Allow thoughts to come and go.",
+      "Simply sit.",
+      "Rest in presence.",
+    ],
+  },
+
+  {
+    title: "Koan Reflection",
+    teacher: "Zen Tradition",
+    minutes: 10,
+    path: "Zen Inquiry",
+    intro: "A contemplative inquiry beyond logic.",
+    steps: [
+      "Sit quietly.",
+      "Bring one existential question into awareness.",
+      "Do not answer mentally.",
+      "Rest in not-knowing.",
+      "Notice silence beneath thought.",
+      "Remain open.",
+    ],
+  },
+
+  {
+    title: "Raja Yoga Dharana",
     teacher: "Swami Vivekananda",
-    tradition: "Raja Yoga",
-    time: "9 min",
     minutes: 9,
     path: "Concentration",
-    text: "Train the mind to rest steadily on one point.",
-    guide:
-      "Sit upright. Bring the mind gently to a single object — breath, sound, or awareness itself. Every return strengthens the mind.",
+    intro: "Train attention through one-pointedness.",
+    steps: [
+      "Sit upright.",
+      "Choose one object of focus.",
+      "Bring attention back whenever it wanders.",
+      "Do not become frustrated.",
+      "Remain steady and alert.",
+      "End with silence.",
+    ],
   },
+
   {
-    title: "Isha Awareness Practice",
-    teacher: "Sadhguru",
-    tradition: "Inner Engineering",
-    time: "7 min",
-    minutes: 7,
-    path: "Inner Distance",
-    text: "Create distance between yourself and body-mind activity.",
-    guide:
-      "Observe the body silently. Then observe the mind. Thoughts are happening, but they are not you.",
+    title: "Mantra Japa",
+    teacher: "Yogic Tradition",
+    minutes: 12,
+    path: "Mantra",
+    intro: "Use sacred sound to stabilize attention.",
+    steps: [
+      "Choose a mantra.",
+      "Repeat it gently inwardly.",
+      "Synchronize it with breathing.",
+      "When distracted, return to the mantra.",
+      "Allow repetition to become subtle.",
+      "Rest in silence afterward.",
+    ],
   },
-  {
-    title: "Zen Sitting",
-    teacher: "Zen Tradition",
-    tradition: "Zazen",
-    time: "15 min",
-    minutes: 15,
-    path: "Stillness",
-    text: "Just sit. Nothing to attain.",
-    guide:
-      "Sit steadily and breathe naturally. Let experience unfold without grasping or rejecting anything.",
-  },
+
   {
     title: "Yoga Nidra",
     teacher: "Tantric Yoga",
-    tradition: "Deep Relaxation",
-    time: "20 min",
     minutes: 20,
     path: "Relaxation",
-    text: "Relax consciously while remaining aware.",
-    guide:
-      "Bring awareness slowly through different parts of the body. Relax each region completely while remaining gently aware.",
+    intro: "Conscious deep relaxation.",
+    steps: [
+      "Lie down comfortably.",
+      "Relax each body part slowly.",
+      "Remain awake and aware.",
+      "Observe the breath naturally.",
+      "Allow the body to soften deeply.",
+      "Return gently.",
+    ],
   },
+
   {
-    title: "Loving Kindness",
-    teacher: "Metta Meditation",
-    tradition: "Compassion",
-    time: "10 min",
+    title: "Trataka",
+    teacher: "Hatha Yoga",
+    minutes: 7,
+    path: "Focus",
+    intro: "Candle gazing for concentration.",
+    steps: [
+      "Place a candle at eye level.",
+      "Gaze softly without strain.",
+      "Keep the body still.",
+      "Close eyes when needed.",
+      "Observe the inner image.",
+      "Rest awareness inwardly.",
+    ],
+  },
+
+  {
+    title: "Ajapa Japa",
+    teacher: "Breath Mantra",
     minutes: 10,
-    path: "Heartfulness",
-    text: "Develop warmth and goodwill toward yourself and others.",
-    guide:
-      "Silently repeat: May I be peaceful. May others be peaceful. Let the feeling expand naturally.",
+    path: "Breath Awareness",
+    intro: "Observe breath with subtle mantra.",
+    steps: [
+      "Observe the inhale.",
+      "Hear So mentally.",
+      "Observe the exhale.",
+      "Hear Ham mentally.",
+      "Allow breath and mantra to merge.",
+      "Rest in awareness.",
+    ],
   },
+
   {
-    title: "Kashmir Shaivism Awareness",
-    teacher: "Vigyan Bhairava Tantra",
-    tradition: "Direct Awareness",
-    time: "11 min",
+    title: "Pratyahara",
+    teacher: "Patanjali Yoga",
+    minutes: 10,
+    path: "Sense Withdrawal",
+    intro: "Withdraw attention inward.",
+    steps: [
+      "Observe outer sounds.",
+      "Do not label them.",
+      "Bring awareness inward.",
+      "Notice the body.",
+      "Notice the breath.",
+      "Rest in inner stillness.",
+    ],
+  },
+
+  {
+    title: "Vigyan Bhairava Gap",
+    teacher: "Kashmir Shaivism",
     minutes: 11,
-    path: "Awareness",
-    text: "Rest in the gap between thoughts and sensations.",
-    guide:
-      "Notice the brief silence between breaths, thoughts, or sounds. Rest attention there.",
+    path: "Direct Awareness",
+    intro: "Rest in the pause between breaths.",
+    steps: [
+      "Observe inhale.",
+      "Notice the pause after inhale.",
+      "Observe exhale.",
+      "Notice the pause after exhale.",
+      "Rest in the gap.",
+      "Allow awareness to recognize itself.",
+    ],
+  },
+
+  {
+    title: "Walking Meditation",
+    teacher: "Buddhist Tradition",
+    minutes: 10,
+    path: "Movement",
+    intro: "Mindfulness through walking.",
+    steps: [
+      "Stand still first.",
+      "Feel the feet touching the ground.",
+      "Walk slowly.",
+      "Observe each step consciously.",
+      "Return attention whenever distracted.",
+      "End standing quietly.",
+    ],
   },
 ];
 
 export default function Home() {
   const [tab, setTab] = useState("home");
-  const [journal, setJournal] = useState("");
-  const [entries, setEntries] = useState([]);
-  const [selectedPractice, setSelectedPractice] = useState(practices[0]);
-  const [minutes, setMinutes] = useState(practices[0].minutes);
-  const [secondsLeft, setSecondsLeft] = useState(practices[0].minutes * 60);
+  const [openedPractice, setOpenedPractice] = useState(null);
+  const [secondsLeft, setSecondsLeft] = useState(0);
   const [running, setRunning] = useState(false);
-  const [sessions, setSessions] = useState(0);
-  const [messages, setMessages] = useState([
-    {
-      role: "assistant",
-      content:
-        "I am Avdhut AI — a contemplative awareness companion by Nomind Club.",
-    },
-  ]);
-  const [input, setInput] = useState("");
 
   useEffect(() => {
-    setEntries(JSON.parse(localStorage.getItem("journal") || "[]"));
-    setSessions(Number(localStorage.getItem("sessions") || 0));
-  }, []);
-
-  useEffect(() => {
-    setSecondsLeft(minutes * 60);
-  }, [minutes]);
+    if (!openedPractice) return;
+    setSecondsLeft(openedPractice.minutes * 60);
+    setRunning(false);
+  }, [openedPractice]);
 
   useEffect(() => {
     if (!running) return;
@@ -151,69 +282,19 @@ export default function Home() {
         if (s <= 1) {
           clearInterval(timer);
           setRunning(false);
-          const newSessions = sessions + 1;
-          setSessions(newSessions);
-          localStorage.setItem("sessions", String(newSessions));
-          return minutes * 60;
+          return 0;
         }
-
         return s - 1;
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [running, minutes, sessions]);
-
-  function selectPractice(p) {
-    setSelectedPractice(p);
-    setMinutes(p.minutes);
-    setSecondsLeft(p.minutes * 60);
-    setRunning(false);
-  }
+  }, [running]);
 
   function restartTimer() {
+    if (!openedPractice) return;
     setRunning(false);
-    setSecondsLeft(minutes * 60);
-  }
-
-  function saveJournal() {
-    if (!journal.trim()) return;
-
-    const updated = [
-      { text: journal, date: new Date().toLocaleString() },
-      ...entries,
-    ];
-
-    setEntries(updated);
-    localStorage.setItem("journal", JSON.stringify(updated));
-    setJournal("");
-  }
-
-  async function sendMessage(e) {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    const updatedMessages = [...messages, { role: "user", content: input }];
-    setMessages(updatedMessages);
-    setInput("");
-
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ messages: updatedMessages }),
-    });
-
-    const data = await response.json();
-
-    setMessages([
-      ...updatedMessages,
-      {
-        role: "assistant",
-        content: data.reply || "No response.",
-      },
-    ]);
+    setSecondsLeft(openedPractice.minutes * 60);
   }
 
   const mins = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
@@ -227,100 +308,82 @@ export default function Home() {
         </div>
 
         <h1>Avdhut AI</h1>
+
         <p>Awareness • Meditation • Contemplative Intelligence</p>
       </section>
 
       <nav className="tabs">
-        <button className={tab === "home" ? "activeTab" : ""} onClick={() => setTab("home")}>
-          Home
-        </button>
-        <button className={tab === "chat" ? "activeTab" : ""} onClick={() => setTab("chat")}>
-          AI Guide
-        </button>
-        <button className={tab === "meditation" ? "activeTab" : ""} onClick={() => setTab("meditation")}>
-          Meditation
-        </button>
-        <button className={tab === "journal" ? "activeTab" : ""} onClick={() => setTab("journal")}>
-          Journal
-        </button>
-        <button className={tab === "progress" ? "activeTab" : ""} onClick={() => setTab("progress")}>
-          Progress
-        </button>
+        <button onClick={() => setTab("home")}>Home</button>
+        <button onClick={() => setTab("meditation")}>Meditation</button>
       </nav>
 
       {tab === "home" && (
         <section className="grid">
           <div className="card big">
-            <h2>Today’s Awareness</h2>
+            <h2>Choose Your Path</h2>
+
             <p>
-              Pause once today before reacting. Observe the first movement of
-              the mind before it becomes a response.
-            </p>
-          </div>
-
-          <div className="card">
-            <h3>Meditation Sessions</h3>
-            <span className="stat">{sessions}</span>
-          </div>
-
-          <div className="card">
-            <h3>Journal Entries</h3>
-            <span className="stat">{entries.length}</span>
-          </div>
-
-          <div className="card big">
-            <h2>Spiritual Traditions</h2>
-            <p>
-              Vedanta, Buddhism, Zen, Tantra, Witnessing, Mindfulness,
-              Compassion, Self-Inquiry, and Yogic Awareness.
+              Explore authentic contemplative practices from Vedanta,
+              Buddhism, Zen, Tantra, Yoga, and Mindfulness traditions.
             </p>
           </div>
         </section>
       )}
 
-      {tab === "chat" && (
-        <section className="chatBox">
-          <div className="messages">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={msg.role === "user" ? "message user" : "message ai"}
+      {tab === "meditation" && !openedPractice && (
+        <section className="methodList">
+          <h2 className="sectionTitle">Meditation Methods</h2>
+
+          <div className="practiceGrid">
+            {practices.map((p) => (
+              <button
+                key={p.title}
+                type="button"
+                className="card practiceCard"
+                onClick={() => setOpenedPractice(p)}
               >
-                {msg.content}
-              </div>
+                <span className="tag">{p.path}</span>
+
+                <h3>{p.title}</h3>
+
+                <small>{p.teacher}</small>
+
+                <p>{p.intro}</p>
+
+                <small>{p.minutes} min practice</small>
+              </button>
             ))}
           </div>
-
-          <form onSubmit={sendMessage} className="inputArea">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask Avdhut..."
-            />
-            <button type="submit">Send</button>
-          </form>
         </section>
       )}
 
-      {tab === "meditation" && (
-        <section className="meditationLayout">
-          <div className="card big center premiumTimer">
-            <span className="tag">{selectedPractice.path}</span>
-            <h2>{selectedPractice.title}</h2>
-            <small>{selectedPractice.teacher}</small>
-            <p>{selectedPractice.text}</p>
+      {tab === "meditation" && openedPractice && (
+        <section className="practiceDetail">
+          <button
+            className="backButton"
+            onClick={() => setOpenedPractice(null)}
+          >
+            ← Back to Methods
+          </button>
 
-            <div className="guideBox">
-              <h3>Guided Practice</h3>
-              <p>{selectedPractice.guide}</p>
-            </div>
+          <div className="card big center premiumTimer">
+            <span className="tag">{openedPractice.path}</span>
+
+            <h2>{openedPractice.title}</h2>
+
+            <small>{openedPractice.teacher}</small>
+
+            <p>{openedPractice.intro}</p>
 
             <div className="timer">
               {mins}:{secs}
             </div>
 
             <div className="timerActions">
-              <button className="primary" onClick={() => setRunning(!running)}>
+              <button
+                className="primary"
+                onClick={() => setRunning(!running)}
+              >
                 {running ? "Pause" : "Start"}
               </button>
 
@@ -330,75 +393,20 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="practiceGrid">
-            {practices.map((p) => (
-              <button
-                type="button"
-                className={
-                  selectedPractice.title === p.title
-                    ? "card practiceCard selectedCard"
-                    : "card practiceCard"
-                }
-                key={p.title}
-                onClick={() => selectPractice(p)}
-              >
-                <span className="tag">{p.path}</span>
-                <h3>{p.title}</h3>
-                <small>{p.teacher}</small>
-                <p>{p.text}</p>
-                <small>{p.time}</small>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
+          <div className="stepsBox">
+            <h2>Guided Steps</h2>
 
-      {tab === "journal" && (
-        <section className="journalBox">
-          <h2>Awareness Journal</h2>
-          <textarea
-            value={journal}
-            onChange={(e) => setJournal(e.target.value)}
-            placeholder="What did you observe in yourself today?"
-          />
+            {openedPractice.steps.map((step, index) => (
+              <div className="stepCard" key={index}>
+                <span>{index + 1}</span>
 
-          <button className="primary" onClick={saveJournal}>
-            Save Reflection
-          </button>
-
-          <div className="entries">
-            {entries.map((entry, index) => (
-              <div className="entry" key={index}>
-                <small>{entry.date}</small>
-                <p>{entry.text}</p>
+                <p>{step}</p>
               </div>
             ))}
           </div>
         </section>
       )}
-
-      {tab === "progress" && (
-        <section className="grid">
-          <div className="card">
-            <h3>Total Meditation Sessions</h3>
-            <span className="stat">{sessions}</span>
-          </div>
-
-          <div className="card">
-            <h3>Total Journal Entries</h3>
-            <span className="stat">{entries.length}</span>
-          </div>
-
-          <div className="card big">
-            <h2>Reminder</h2>
-            <p>Pause once daily. Observe thoughts before reacting to them.</p>
-          </div>
-        </section>
-      )}
-
-      <p className="disclaimer">
-        Avdhut is for contemplative and educational guidance only.
-      </p>
     </main>
   );
 }
+```
