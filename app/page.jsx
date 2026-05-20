@@ -11,12 +11,12 @@ const practices = [
     path: "Advaita",
     intro: "Direct self inquiry toward awareness.",
     steps: [
-      "Sit silently.",
-      "Observe thoughts.",
+      "Sit silently and relax the body.",
+      "Observe thoughts arising.",
       "Ask: To whom has this thought appeared?",
       "Notice the answer: to me.",
       "Ask: Who am I?",
-      "Rest as awareness."
+      "Rest as awareness itself."
     ]
   },
 
@@ -25,13 +25,28 @@ const practices = [
     teacher: "Buddha",
     minutes: 12,
     path: "Mindfulness",
-    intro: "Observe breathing naturally.",
+    intro: "Mindfulness of breathing.",
     steps: [
-      "Observe inhale.",
-      "Observe exhale.",
-      "Return when distracted.",
-      "Stay aware of breath.",
-      "Remain relaxed."
+      "Observe the inhale.",
+      "Observe the exhale.",
+      "When distracted, return gently.",
+      "Feel the breath naturally.",
+      "Remain relaxed and aware."
+    ]
+  },
+
+  {
+    title: "Vipassana",
+    teacher: "Buddhist Tradition",
+    minutes: 20,
+    path: "Insight",
+    intro: "Observe sensations with equanimity.",
+    steps: [
+      "Bring awareness to the body.",
+      "Observe sensations calmly.",
+      "Do not react.",
+      "Notice everything changing.",
+      "Remain balanced."
     ]
   },
 
@@ -40,7 +55,7 @@ const practices = [
     teacher: "Zen Tradition",
     minutes: 15,
     path: "Zen",
-    intro: "Just sit in awareness.",
+    intro: "Just sitting in direct awareness.",
     steps: [
       "Sit upright.",
       "Breathe naturally.",
@@ -48,14 +63,117 @@ const practices = [
       "Do not control experience.",
       "Rest in presence."
     ]
+  },
+
+  {
+    title: "Raja Yoga Dharana",
+    teacher: "Swami Vivekananda",
+    minutes: 9,
+    path: "Concentration",
+    intro: "Train attention through one pointedness.",
+    steps: [
+      "Choose one object of focus.",
+      "Keep attention there.",
+      "Return whenever distracted.",
+      "Remain calm and steady.",
+      "End in silence."
+    ]
+  },
+
+  {
+    title: "Mantra Japa",
+    teacher: "Yogic Tradition",
+    minutes: 12,
+    path: "Mantra",
+    intro: "Sacred sound repetition meditation.",
+    steps: [
+      "Choose a mantra.",
+      "Repeat internally.",
+      "Synchronize with breathing.",
+      "Return whenever distracted.",
+      "Rest in silence afterward."
+    ]
+  },
+
+  {
+    title: "Yoga Nidra",
+    teacher: "Tantric Yoga",
+    minutes: 20,
+    path: "Relaxation",
+    intro: "Conscious deep relaxation.",
+    steps: [
+      "Lie down comfortably.",
+      "Relax each body part.",
+      "Remain aware.",
+      "Observe breath naturally.",
+      "Allow deep relaxation."
+    ]
+  },
+
+  {
+    title: "Vigyan Bhairava",
+    teacher: "Kashmir Shaivism",
+    minutes: 11,
+    path: "Direct Awareness",
+    intro: "Rest in the pause between breaths.",
+    steps: [
+      "Observe inhale.",
+      "Notice the pause.",
+      "Observe exhale.",
+      "Rest in the gap.",
+      "Remain as awareness."
+    ]
+  },
+
+  {
+    title: "Metta Bhavana",
+    teacher: "Loving Kindness",
+    minutes: 10,
+    path: "Compassion",
+    intro: "Cultivate compassion and goodwill.",
+    steps: [
+      "Bring awareness to the heart.",
+      "Repeat: May I be peaceful.",
+      "Extend kindness to others.",
+      "Rest in compassion."
+    ]
   }
 ];
 
 export default function Home() {
   const [tab, setTab] = useState("home");
   const [openedPractice, setOpenedPractice] = useState(null);
+
+  const [journal, setJournal] = useState("");
+  const [entries, setEntries] = useState([]);
+
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [running, setRunning] = useState(false);
+
+  const [sessions, setSessions] = useState(0);
+
+  const [input, setInput] = useState("");
+
+  const [messages, setMessages] = useState([
+    {
+      role: "assistant",
+      content:
+        "I am Avdhut AI — a contemplative awareness companion."
+    }
+  ]);
+
+  useEffect(() => {
+    const savedEntries = JSON.parse(
+      localStorage.getItem("journal") || "[]"
+    );
+
+    const savedSessions = Number(
+      localStorage.getItem("sessions") || 0
+    );
+
+    setEntries(savedEntries);
+    setSessions(savedSessions);
+  }, []);
 
   useEffect(() => {
     if (!openedPractice) return;
@@ -71,7 +189,18 @@ export default function Home() {
       setSecondsLeft((s) => {
         if (s <= 1) {
           clearInterval(timer);
+
           setRunning(false);
+
+          const newSessions = sessions + 1;
+
+          setSessions(newSessions);
+
+          localStorage.setItem(
+            "sessions",
+            String(newSessions)
+          );
+
           return 0;
         }
 
@@ -80,22 +209,104 @@ export default function Home() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [running]);
+  }, [running, sessions]);
+
+  async function sendMessage(e) {
+    e.preventDefault();
+
+    if (!input.trim()) return;
+
+    const updatedMessages = [
+      ...messages,
+      {
+        role: "user",
+        content: input
+      }
+    ];
+
+    setMessages(updatedMessages);
+
+    setInput("");
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          messages: updatedMessages
+        })
+      });
+
+      const data = await response.json();
+
+      setMessages([
+        ...updatedMessages,
+        {
+          role: "assistant",
+          content:
+            data.reply || "No response."
+        }
+      ]);
+    } catch {
+      setMessages([
+        ...updatedMessages,
+        {
+          role: "assistant",
+          content:
+            "Something went wrong."
+        }
+      ]);
+    }
+  }
+
+  function saveJournal() {
+    if (!journal.trim()) return;
+
+    const updated = [
+      {
+        text: journal,
+        date: new Date().toLocaleString()
+      },
+      ...entries
+    ];
+
+    setEntries(updated);
+
+    localStorage.setItem(
+      "journal",
+      JSON.stringify(updated)
+    );
+
+    setJournal("");
+  }
 
   function restartTimer() {
     if (!openedPractice) return;
 
     setRunning(false);
-    setSecondsLeft(openedPractice.minutes * 60);
+
+    setSecondsLeft(
+      openedPractice.minutes * 60
+    );
   }
 
-  const mins = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
-  const secs = String(secondsLeft % 60).padStart(2, "0");
+  const mins = String(
+    Math.floor(secondsLeft / 60)
+  ).padStart(2, "0");
+
+  const secs = String(
+    secondsLeft % 60
+  ).padStart(2, "0");
 
   return (
     <main className="page">
 
       <section className="hero">
+
         <div className="brandMark">
           <div className="ensoCircle"></div>
         </div>
@@ -103,33 +314,146 @@ export default function Home() {
         <h1>Avdhut AI</h1>
 
         <p>
-          Awareness • Meditation • Contemplative Intelligence
+          Awareness • Meditation •
+          Contemplative Intelligence
         </p>
+
       </section>
 
       <nav className="tabs">
-        <button onClick={() => setTab("home")}>
+
+        <button
+          onClick={() => setTab("home")}
+        >
           Home
         </button>
 
-        <button onClick={() => setTab("meditation")}>
+        <button
+          onClick={() => setTab("chat")}
+        >
+          AI Guide
+        </button>
+
+        <button
+          onClick={() =>
+            setTab("meditation")
+          }
+        >
           Meditation
         </button>
+
+        <button
+          onClick={() =>
+            setTab("journal")
+          }
+        >
+          Journal
+        </button>
+
+        <button
+          onClick={() =>
+            setTab("progress")
+          }
+        >
+          Progress
+        </button>
+
       </nav>
 
       {tab === "home" && (
+
         <section className="grid">
+
           <div className="card big">
-            <h2>Meditation Library</h2>
+
+            <h2>
+              Meditation Library
+            </h2>
 
             <p>
-              Explore authentic contemplative methods.
+              Explore authentic contemplative
+              methods from different traditions.
             </p>
+
           </div>
+
+          <div className="card">
+
+            <h3>
+              Meditation Sessions
+            </h3>
+
+            <span className="stat">
+              {sessions}
+            </span>
+
+          </div>
+
+          <div className="card">
+
+            <h3>
+              Journal Entries
+            </h3>
+
+            <span className="stat">
+              {entries.length}
+            </span>
+
+          </div>
+
         </section>
+
       )}
 
-      {tab === "meditation" && !openedPractice && (
+      {tab === "chat" && (
+
+        <section className="chatBox">
+
+          <div className="messages">
+
+            {messages.map((msg, index) => (
+
+              <div
+                key={index}
+                className={
+                  msg.role === "user"
+                    ? "message user"
+                    : "message ai"
+                }
+              >
+                {msg.content}
+              </div>
+
+            ))}
+
+          </div>
+
+          <form
+            onSubmit={sendMessage}
+            className="inputArea"
+          >
+
+            <input
+              value={input}
+              onChange={(e) =>
+                setInput(e.target.value)
+              }
+              placeholder="Ask Avdhut..."
+            />
+
+            <button type="submit">
+              Send
+            </button>
+
+          </form>
+
+        </section>
+
+      )}
+
+      {tab === "meditation" &&
+        !openedPractice && (
+
         <section>
 
           <h2 className="sectionTitle">
@@ -143,7 +467,9 @@ export default function Home() {
               <button
                 key={p.title}
                 className="card practiceCard"
-                onClick={() => setOpenedPractice(p)}
+                onClick={() =>
+                  setOpenedPractice(p)
+                }
               >
 
                 <span className="tag">
@@ -152,11 +478,15 @@ export default function Home() {
 
                 <h3>{p.title}</h3>
 
-                <small>{p.teacher}</small>
+                <small>
+                  {p.teacher}
+                </small>
 
                 <p>{p.intro}</p>
 
-                <small>{p.minutes} min</small>
+                <small>
+                  {p.minutes} min
+                </small>
 
               </button>
 
@@ -165,15 +495,19 @@ export default function Home() {
           </div>
 
         </section>
+
       )}
 
-      {tab === "meditation" && openedPractice && (
+      {tab === "meditation" &&
+        openedPractice && (
 
         <section className="practiceDetail">
 
           <button
             className="backButton"
-            onClick={() => setOpenedPractice(null)}
+            onClick={() =>
+              setOpenedPractice(null)
+            }
           >
             ← Back
           </button>
@@ -184,11 +518,17 @@ export default function Home() {
               {openedPractice.path}
             </span>
 
-            <h2>{openedPractice.title}</h2>
+            <h2>
+              {openedPractice.title}
+            </h2>
 
-            <small>{openedPractice.teacher}</small>
+            <small>
+              {openedPractice.teacher}
+            </small>
 
-            <p>{openedPractice.intro}</p>
+            <p>
+              {openedPractice.intro}
+            </p>
 
             <div className="timer">
               {mins}:{secs}
@@ -198,9 +538,13 @@ export default function Home() {
 
               <button
                 className="primary"
-                onClick={() => setRunning(!running)}
+                onClick={() =>
+                  setRunning(!running)
+                }
               >
-                {running ? "Pause" : "Start"}
+                {running
+                  ? "Pause"
+                  : "Start"}
               </button>
 
               <button
@@ -216,19 +560,108 @@ export default function Home() {
 
           <div className="stepsBox">
 
-            <h2>Guided Steps</h2>
+            <h2>
+              Guided Steps
+            </h2>
 
-            {openedPractice.steps.map((step, index) => (
+            {openedPractice.steps.map(
+              (step, index) => (
 
-              <div className="stepCard" key={index}>
+                <div
+                  className="stepCard"
+                  key={index}
+                >
 
-                <span>{index + 1}</span>
+                  <span>
+                    {index + 1}
+                  </span>
 
-                <p>{step}</p>
+                  <p>{step}</p>
+
+                </div>
+
+              )
+            )}
+
+          </div>
+
+        </section>
+
+      )}
+
+      {tab === "journal" && (
+
+        <section className="journalBox">
+
+          <h2>
+            Awareness Journal
+          </h2>
+
+          <textarea
+            value={journal}
+            onChange={(e) =>
+              setJournal(e.target.value)
+            }
+            placeholder="What did you observe today?"
+          />
+
+          <button
+            className="primary"
+            onClick={saveJournal}
+          >
+            Save Reflection
+          </button>
+
+          <div className="entries">
+
+            {entries.map((entry, index) => (
+
+              <div
+                className="entry"
+                key={index}
+              >
+
+                <small>
+                  {entry.date}
+                </small>
+
+                <p>{entry.text}</p>
 
               </div>
 
             ))}
+
+          </div>
+
+        </section>
+
+      )}
+
+      {tab === "progress" && (
+
+        <section className="grid">
+
+          <div className="card">
+
+            <h3>
+              Total Sessions
+            </h3>
+
+            <span className="stat">
+              {sessions}
+            </span>
+
+          </div>
+
+          <div className="card">
+
+            <h3>
+              Journal Entries
+            </h3>
+
+            <span className="stat">
+              {entries.length}
+            </span>
 
           </div>
 
