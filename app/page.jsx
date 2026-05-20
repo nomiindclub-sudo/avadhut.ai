@@ -5,8 +5,7 @@ import "./globals.css";
 
 const START_MESSAGE = {
   role: "assistant",
-  content:
-    "I am Avdhut AI — a contemplative awareness companion."
+  content: "I am Avdhut AI — a contemplative awareness companion."
 };
 
 const practices = [
@@ -25,7 +24,6 @@ const practices = [
       "Rest as awareness itself."
     ]
   },
-
   {
     title: "Anapanasati",
     teacher: "Buddha",
@@ -40,7 +38,20 @@ const practices = [
       "Remain relaxed and aware."
     ]
   },
-
+  {
+    title: "Vipassana",
+    teacher: "Buddhist Tradition",
+    minutes: 20,
+    path: "Insight",
+    intro: "Observe sensations with equanimity.",
+    steps: [
+      "Bring awareness to the body.",
+      "Observe sensations calmly.",
+      "Do not react.",
+      "Notice everything changing.",
+      "Remain balanced."
+    ]
+  },
   {
     title: "Zazen",
     teacher: "Zen Tradition",
@@ -54,127 +65,125 @@ const practices = [
       "Do not control experience.",
       "Rest in presence."
     ]
+  },
+  {
+    title: "Raja Yoga Dharana",
+    teacher: "Swami Vivekananda",
+    minutes: 9,
+    path: "Concentration",
+    intro: "Train attention through one pointedness.",
+    steps: [
+      "Choose one object of focus.",
+      "Keep attention there.",
+      "Return whenever distracted.",
+      "Remain calm and steady.",
+      "End in silence."
+    ]
+  },
+  {
+    title: "Mantra Japa",
+    teacher: "Yogic Tradition",
+    minutes: 12,
+    path: "Mantra",
+    intro: "Sacred sound repetition meditation.",
+    steps: [
+      "Choose a mantra.",
+      "Repeat internally.",
+      "Synchronize with breathing.",
+      "Return whenever distracted.",
+      "Rest in silence afterward."
+    ]
+  },
+  {
+    title: "Yoga Nidra",
+    teacher: "Tantric Yoga",
+    minutes: 20,
+    path: "Relaxation",
+    intro: "Conscious deep relaxation.",
+    steps: [
+      "Lie down comfortably.",
+      "Relax each body part.",
+      "Remain aware.",
+      "Observe breath naturally.",
+      "Allow deep relaxation."
+    ]
+  },
+  {
+    title: "Vigyan Bhairava",
+    teacher: "Kashmir Shaivism",
+    minutes: 11,
+    path: "Direct Awareness",
+    intro: "Rest in the pause between breaths.",
+    steps: [
+      "Observe inhale.",
+      "Notice the pause.",
+      "Observe exhale.",
+      "Rest in the gap.",
+      "Remain as awareness."
+    ]
+  },
+  {
+    title: "Metta Bhavana",
+    teacher: "Loving Kindness",
+    minutes: 10,
+    path: "Compassion",
+    intro: "Cultivate compassion and goodwill.",
+    steps: [
+      "Bring awareness to the heart.",
+      "Repeat: May I be peaceful.",
+      "Extend kindness to others.",
+      "Rest in compassion."
+    ]
   }
 ];
 
 export default function Home() {
-
-  const [entered, setEntered] =
-    useState(false);
-
-  const [tab, setTab] =
-    useState("home");
-
-  const [openedPractice,
-    setOpenedPractice] =
-    useState(null);
-
-  const [journal,
-    setJournal] =
-    useState("");
-
-  const [entries,
-    setEntries] =
-    useState([]);
-
-  const [secondsLeft,
-    setSecondsLeft] =
-    useState(0);
-
-  const [running,
-    setRunning] =
-    useState(false);
-
-  const [sessions,
-    setSessions] =
-    useState(0);
-
-  const [input,
-    setInput] =
-    useState("");
-
-  const [messages,
-    setMessages] =
-    useState([START_MESSAGE]);
+  const [entered, setEntered] = useState(false);
+  const [tab, setTab] = useState("home");
+  const [openedPractice, setOpenedPractice] = useState(null);
+  const [journal, setJournal] = useState("");
+  const [entries, setEntries] = useState([]);
+  const [secondsLeft, setSecondsLeft] = useState(0);
+  const [running, setRunning] = useState(false);
+  const [sessions, setSessions] = useState(0);
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([START_MESSAGE]);
 
   useEffect(() => {
-
-    const savedEntries =
-      JSON.parse(
-        localStorage.getItem(
-          "journal"
-        ) || "[]"
-      );
-
-    const savedSessions =
-      Number(
-        localStorage.getItem(
-          "sessions"
-        ) || 0
-      );
-
-    setEntries(savedEntries);
-
-    setSessions(savedSessions);
-
+    setEntries(JSON.parse(localStorage.getItem("journal") || "[]"));
+    setSessions(Number(localStorage.getItem("sessions") || 0));
   }, []);
 
   useEffect(() => {
-
-    if (!openedPractice)
-      return;
-
-    setSecondsLeft(
-      openedPractice.minutes * 60
-    );
-
+    if (!openedPractice) return;
+    setSecondsLeft(openedPractice.minutes * 60);
     setRunning(false);
-
   }, [openedPractice]);
 
   useEffect(() => {
-
     if (!running) return;
 
-    const timer =
-      setInterval(() => {
+    const timer = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          clearInterval(timer);
+          setRunning(false);
 
-        setSecondsLeft((s) => {
+          const newSessions = sessions + 1;
+          setSessions(newSessions);
+          localStorage.setItem("sessions", String(newSessions));
 
-          if (s <= 1) {
+          return 0;
+        }
 
-            clearInterval(timer);
+        return s - 1;
+      });
+    }, 1000);
 
-            setRunning(false);
-
-            const newSessions =
-              sessions + 1;
-
-            setSessions(
-              newSessions
-            );
-
-            localStorage.setItem(
-              "sessions",
-              String(newSessions)
-            );
-
-            return 0;
-          }
-
-          return s - 1;
-
-        });
-
-      }, 1000);
-
-    return () =>
-      clearInterval(timer);
-
+    return () => clearInterval(timer);
   }, [running, sessions]);
 
   async function sendMessage(e) {
-
     e.preventDefault();
 
     if (!input.trim()) return;
@@ -188,633 +197,281 @@ export default function Home() {
     ];
 
     setMessages(updatedMessages);
-
     setInput("");
 
     try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          messages: updatedMessages
+        })
+      });
 
-      const response =
-        await fetch(
-          "/api/chat",
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body: JSON.stringify({
-              messages:
-                updatedMessages
-            })
-          }
-        );
-
-      const data =
-        await response.json();
+      const data = await response.json();
 
       setMessages([
         ...updatedMessages,
         {
           role: "assistant",
-          content:
-            data.reply ||
-            "No response."
+          content: data.reply || "No response."
         }
       ]);
-
     } catch {
-
       setMessages([
         ...updatedMessages,
         {
           role: "assistant",
-          content:
-            "Something went wrong."
+          content: "Something went wrong."
         }
       ]);
-
     }
-
   }
 
   function saveJournal() {
-
-    if (!journal.trim())
-      return;
+    if (!journal.trim()) return;
 
     const updated = [
       {
         text: journal,
-        date:
-          new Date()
-            .toLocaleString()
+        date: new Date().toLocaleString()
       },
       ...entries
     ];
 
     setEntries(updated);
-
-    localStorage.setItem(
-      "journal",
-      JSON.stringify(updated)
-    );
-
+    localStorage.setItem("journal", JSON.stringify(updated));
     setJournal("");
-
   }
 
   function restartTimer() {
-
-    if (!openedPractice)
-      return;
+    if (!openedPractice) return;
 
     setRunning(false);
-
-    setSecondsLeft(
-      openedPractice.minutes *
-      60
-    );
-
+    setSecondsLeft(openedPractice.minutes * 60);
   }
 
   function newChat() {
-
-    setMessages([
-      START_MESSAGE
-    ]);
-
+    setMessages([START_MESSAGE]);
     setInput("");
-
   }
 
   function editMessage(index) {
+    setInput(messages[index].content);
 
-    setInput(
-      messages[index]
-        .content
-    );
-
-    const updated = [
-      ...messages
-    ];
-
+    const updated = [...messages];
     updated.splice(index);
 
     setMessages(updated);
-
   }
 
-  const mins = String(
-    Math.floor(
-      secondsLeft / 60
-    )
-  ).padStart(2, "0");
-
-  const secs = String(
-    secondsLeft % 60
-  ).padStart(2, "0");
+  const mins = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
+  const secs = String(secondsLeft % 60).padStart(2, "0");
 
   if (!entered) {
-
     return (
-
       <main className="welcomePage">
-
         <div className="welcomeCard">
-
           <div className="brandMark">
             <div className="ensoCircle"></div>
           </div>
 
           <h1>Avdhut AI</h1>
 
-          <p>
-            Awareness • Meditation •
-            Contemplative Intelligence
-          </p>
+          <p>Awareness • Meditation • Contemplative Intelligence</p>
 
-          <button
-            className="primary"
-            onClick={() =>
-              setEntered(true)
-            }
-          >
+          <button className="primary" onClick={() => setEntered(true)}>
             Continue as Guest
           </button>
 
-          <button
-            className="secondary bigBtn"
-            onClick={() =>
-              setEntered(true)
-            }
-          >
-            Sign in to save your journey
+          <button className="secondary bigBtn">
+            Save journey login coming soon
           </button>
-
         </div>
-
       </main>
-
     );
-
   }
 
   return (
-
     <main className="page">
-
       <section className="hero">
-
         <div className="brandMark">
           <div className="ensoCircle"></div>
         </div>
 
         <h1>Avdhut AI</h1>
 
-        <p>
-          Awareness • Meditation •
-          Contemplative Intelligence
-        </p>
-
+        <p>Awareness • Meditation • Contemplative Intelligence</p>
       </section>
 
       <nav className="tabs">
-
-        <button
-          onClick={() =>
-            setTab("home")
-          }
-        >
-          Home
-        </button>
-
-        <button
-          onClick={() =>
-            setTab("chat")
-          }
-        >
-          AI Guide
-        </button>
-
-        <button
-          onClick={() =>
-            setTab(
-              "meditation"
-            )
-          }
-        >
-          Meditation
-        </button>
-
-        <button
-          onClick={() =>
-            setTab(
-              "journal"
-            )
-          }
-        >
-          Journal
-        </button>
-
-        <button
-          onClick={() =>
-            setTab(
-              "progress"
-            )
-          }
-        >
-          Progress
-        </button>
-
+        <button onClick={() => setTab("home")}>Home</button>
+        <button onClick={() => setTab("chat")}>AI Guide</button>
+        <button onClick={() => setTab("meditation")}>Meditation</button>
+        <button onClick={() => setTab("journal")}>Journal</button>
+        <button onClick={() => setTab("progress")}>Progress</button>
       </nav>
 
       {tab === "home" && (
-
         <section className="grid">
-
           <div className="card big">
-
-            <h2>
-              Meditation Library
-            </h2>
-
-            <p>
-              Explore authentic
-              contemplative methods.
-            </p>
-
+            <h2>Meditation Library</h2>
+            <p>Explore authentic contemplative methods from different traditions.</p>
           </div>
 
           <div className="card">
-
-            <h3>
-              Meditation Sessions
-            </h3>
-
-            <span className="stat">
-              {sessions}
-            </span>
-
+            <h3>Meditation Sessions</h3>
+            <span className="stat">{sessions}</span>
           </div>
 
           <div className="card">
-
-            <h3>
-              Journal Entries
-            </h3>
-
-            <span className="stat">
-              {entries.length}
-            </span>
-
+            <h3>Journal Entries</h3>
+            <span className="stat">{entries.length}</span>
           </div>
-
         </section>
-
       )}
 
       {tab === "chat" && (
-
         <section className="chatBox">
-
           <div className="timerActions">
-
-            <button
-              className="secondary"
-              onClick={newChat}
-            >
+            <button className="secondary" onClick={newChat}>
               New Chat
             </button>
-
           </div>
 
           <div className="messages">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={msg.role === "user" ? "message user" : "message ai"}
+              >
+                <p>{msg.content}</p>
 
-            {messages.map(
-              (msg, index) => (
-
-                <div
-                  key={index}
-                  className={
-                    msg.role ===
-                    "user"
-                      ? "message user"
-                      : "message ai"
-                  }
-                >
-
-                  <p>
-                    {msg.content}
-                  </p>
-
-                  {msg.role ===
-                    "user" && (
-
-                    <div className="messageActions">
-
-                      <button
-                        className="editBtn"
-                        onClick={() =>
-                          editMessage(
-                            index
-                          )
-                        }
-                      >
-                        ✎
-                      </button>
-
-                    </div>
-
-                  )}
-
-                </div>
-
-              )
-            )}
-
+                {msg.role === "user" && (
+                  <div className="messageActions">
+                    <button className="editBtn" onClick={() => editMessage(index)}>
+                      ✎
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
 
-          <form
-            onSubmit={sendMessage}
-            className="inputArea"
-          >
-
+          <form onSubmit={sendMessage} className="inputArea">
             <input
               value={input}
-              onChange={(e) =>
-                setInput(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Ask Avdhut..."
             />
 
-            <button type="submit">
-              Send
-            </button>
-
+            <button type="submit">Send</button>
           </form>
-
         </section>
-
       )}
 
-      {tab === "meditation" &&
-        !openedPractice && (
-
+      {tab === "meditation" && !openedPractice && (
         <section>
-
-          <h2 className="sectionTitle">
-            Meditation Methods
-          </h2>
+          <h2 className="sectionTitle">Meditation Methods</h2>
 
           <div className="practiceGrid">
-
-            {practices.map(
-              (p) => (
-
-                <button
-                  key={p.title}
-                  className="card practiceCard"
-                  onClick={() =>
-                    setOpenedPractice(
-                      p
-                    )
-                  }
-                >
-
-                  <span className="tag">
-                    {p.path}
-                  </span>
-
-                  <h3>
-                    {p.title}
-                  </h3>
-
-                  <small>
-                    {p.teacher}
-                  </small>
-
-                  <p>
-                    {p.intro}
-                  </p>
-
-                  <small>
-                    {p.minutes} min
-                  </small>
-
-                </button>
-
-              )
-            )}
-
+            {practices.map((p) => (
+              <button
+                key={p.title}
+                className="card practiceCard"
+                onClick={() => setOpenedPractice(p)}
+              >
+                <span className="tag">{p.path}</span>
+                <h3>{p.title}</h3>
+                <small>{p.teacher}</small>
+                <p>{p.intro}</p>
+                <small>{p.minutes} min</small>
+              </button>
+            ))}
           </div>
-
         </section>
-
       )}
 
-      {tab === "meditation" &&
-        openedPractice && (
-
+      {tab === "meditation" && openedPractice && (
         <section className="practiceDetail">
-
-          <button
-            className="backButton"
-            onClick={() =>
-              setOpenedPractice(
-                null
-              )
-            }
-          >
+          <button className="backButton" onClick={() => setOpenedPractice(null)}>
             ← Back
           </button>
 
           <div className="card premiumTimer">
-
-            <span className="tag">
-              {openedPractice.path}
-            </span>
-
-            <h2>
-              {
-                openedPractice.title
-              }
-            </h2>
-
-            <small>
-              {
-                openedPractice.teacher
-              }
-            </small>
-
-            <p>
-              {
-                openedPractice.intro
-              }
-            </p>
+            <span className="tag">{openedPractice.path}</span>
+            <h2>{openedPractice.title}</h2>
+            <small>{openedPractice.teacher}</small>
+            <p>{openedPractice.intro}</p>
 
             <div className="timer">
               {mins}:{secs}
             </div>
 
             <div className="timerActions">
-
-              <button
-                className="primary"
-                onClick={() =>
-                  setRunning(
-                    !running
-                  )
-                }
-              >
-                {running
-                  ? "Pause"
-                  : "Start"}
+              <button className="primary" onClick={() => setRunning(!running)}>
+                {running ? "Pause" : "Start"}
               </button>
 
-              <button
-                className="secondary"
-                onClick={
-                  restartTimer
-                }
-              >
+              <button className="secondary" onClick={restartTimer}>
                 Restart
               </button>
-
             </div>
-
           </div>
 
           <div className="stepsBox">
+            <h2>Guided Steps</h2>
 
-            <h2>
-              Guided Steps
-            </h2>
-
-            {openedPractice.steps.map(
-              (
-                step,
-                index
-              ) => (
-
-                <div
-                  className="stepCard"
-                  key={index}
-                >
-
-                  <span>
-                    {index + 1}
-                  </span>
-
-                  <p>{step}</p>
-
-                </div>
-
-              )
-            )}
-
+            {openedPractice.steps.map((step, index) => (
+              <div className="stepCard" key={index}>
+                <span>{index + 1}</span>
+                <p>{step}</p>
+              </div>
+            ))}
           </div>
-
         </section>
-
       )}
 
       {tab === "journal" && (
-
         <section className="journalBox">
-
-          <h2>
-            Awareness Journal
-          </h2>
+          <h2>Awareness Journal</h2>
 
           <textarea
             value={journal}
-            onChange={(e) =>
-              setJournal(
-                e.target.value
-              )
-            }
+            onChange={(e) => setJournal(e.target.value)}
             placeholder="What did you observe today?"
           />
 
-          <button
-            className="primary"
-            onClick={
-              saveJournal
-            }
-          >
+          <button className="primary" onClick={saveJournal}>
             Save Reflection
           </button>
 
           <div className="entries">
-
-            {entries.map(
-              (
-                entry,
-                index
-              ) => (
-
-                <div
-                  className="entry"
-                  key={index}
-                >
-
-                  <small>
-                    {entry.date}
-                  </small>
-
-                  <p>
-                    {entry.text}
-                  </p>
-
-                </div>
-
-              )
-            )}
-
+            {entries.map((entry, index) => (
+              <div className="entry" key={index}>
+                <small>{entry.date}</small>
+                <p>{entry.text}</p>
+              </div>
+            ))}
           </div>
-
         </section>
-
       )}
 
       {tab === "progress" && (
-
         <section className="grid">
-
           <div className="card">
-
-            <h3>
-              Total Sessions
-            </h3>
-
-            <span className="stat">
-              {sessions}
-            </span>
-
+            <h3>Total Sessions</h3>
+            <span className="stat">{sessions}</span>
           </div>
 
           <div className="card">
-
-            <h3>
-              Journal Entries
-            </h3>
-
-            <span className="stat">
-              {entries.length}
-            </span>
-
+            <h3>Journal Entries</h3>
+            <span className="stat">{entries.length}</span>
           </div>
-
         </section>
-
       )}
-
     </main>
-
   );
-
 }
