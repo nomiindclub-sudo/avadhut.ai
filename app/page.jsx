@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react";
 import "./globals.css";
 
+const START_MESSAGE = {
+  role: "assistant",
+  content:
+    "I am Avdhut AI — a contemplative awareness companion."
+};
+
 const practices = [
   {
     title: "Atma Vichara",
@@ -19,7 +25,6 @@ const practices = [
       "Rest as awareness itself."
     ]
   },
-
   {
     title: "Anapanasati",
     teacher: "Buddha",
@@ -34,7 +39,6 @@ const practices = [
       "Remain relaxed and aware."
     ]
   },
-
   {
     title: "Vipassana",
     teacher: "Buddhist Tradition",
@@ -49,7 +53,6 @@ const practices = [
       "Remain balanced."
     ]
   },
-
   {
     title: "Zazen",
     teacher: "Zen Tradition",
@@ -64,7 +67,6 @@ const practices = [
       "Rest in presence."
     ]
   },
-
   {
     title: "Raja Yoga Dharana",
     teacher: "Swami Vivekananda",
@@ -79,7 +81,6 @@ const practices = [
       "End in silence."
     ]
   },
-
   {
     title: "Mantra Japa",
     teacher: "Yogic Tradition",
@@ -94,7 +95,6 @@ const practices = [
       "Rest in silence afterward."
     ]
   },
-
   {
     title: "Yoga Nidra",
     teacher: "Tantric Yoga",
@@ -109,7 +109,6 @@ const practices = [
       "Allow deep relaxation."
     ]
   },
-
   {
     title: "Vigyan Bhairava",
     teacher: "Kashmir Shaivism",
@@ -124,7 +123,6 @@ const practices = [
       "Remain as awareness."
     ]
   },
-
   {
     title: "Metta Bhavana",
     teacher: "Loving Kindness",
@@ -143,41 +141,21 @@ const practices = [
 export default function Home() {
   const [tab, setTab] = useState("home");
   const [openedPractice, setOpenedPractice] = useState(null);
-
   const [journal, setJournal] = useState("");
   const [entries, setEntries] = useState([]);
-
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [running, setRunning] = useState(false);
-
   const [sessions, setSessions] = useState(0);
-
   const [input, setInput] = useState("");
-
-  const [messages, setMessages] = useState([
-    {
-      role: "assistant",
-      content:
-        "I am Avdhut AI — a contemplative awareness companion."
-    }
-  ]);
+  const [messages, setMessages] = useState([START_MESSAGE]);
 
   useEffect(() => {
-    const savedEntries = JSON.parse(
-      localStorage.getItem("journal") || "[]"
-    );
-
-    const savedSessions = Number(
-      localStorage.getItem("sessions") || 0
-    );
-
-    setEntries(savedEntries);
-    setSessions(savedSessions);
+    setEntries(JSON.parse(localStorage.getItem("journal") || "[]"));
+    setSessions(Number(localStorage.getItem("sessions") || 0));
   }, []);
 
   useEffect(() => {
     if (!openedPractice) return;
-
     setSecondsLeft(openedPractice.minutes * 60);
     setRunning(false);
   }, [openedPractice]);
@@ -189,17 +167,11 @@ export default function Home() {
       setSecondsLeft((s) => {
         if (s <= 1) {
           clearInterval(timer);
-
           setRunning(false);
 
           const newSessions = sessions + 1;
-
           setSessions(newSessions);
-
-          localStorage.setItem(
-            "sessions",
-            String(newSessions)
-          );
+          localStorage.setItem("sessions", String(newSessions));
 
           return 0;
         }
@@ -213,7 +185,6 @@ export default function Home() {
 
   async function sendMessage(e) {
     e.preventDefault();
-
     if (!input.trim()) return;
 
     const updatedMessages = [
@@ -225,17 +196,14 @@ export default function Home() {
     ];
 
     setMessages(updatedMessages);
-
     setInput("");
 
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json"
         },
-
         body: JSON.stringify({
           messages: updatedMessages
         })
@@ -247,8 +215,7 @@ export default function Home() {
         ...updatedMessages,
         {
           role: "assistant",
-          content:
-            data.reply || "No response."
+          content: data.reply || "No response."
         }
       ]);
     } catch {
@@ -256,8 +223,7 @@ export default function Home() {
         ...updatedMessages,
         {
           role: "assistant",
-          content:
-            "Something went wrong."
+          content: "Something went wrong."
         }
       ]);
     }
@@ -275,38 +241,36 @@ export default function Home() {
     ];
 
     setEntries(updated);
-
-    localStorage.setItem(
-      "journal",
-      JSON.stringify(updated)
-    );
-
+    localStorage.setItem("journal", JSON.stringify(updated));
     setJournal("");
   }
 
   function restartTimer() {
     if (!openedPractice) return;
-
     setRunning(false);
-
-    setSecondsLeft(
-      openedPractice.minutes * 60
-    );
+    setSecondsLeft(openedPractice.minutes * 60);
   }
 
-  const mins = String(
-    Math.floor(secondsLeft / 60)
-  ).padStart(2, "0");
+  function newChat() {
+    setMessages([START_MESSAGE]);
+    setInput("");
+  }
 
-  const secs = String(
-    secondsLeft % 60
-  ).padStart(2, "0");
+  function editMessage(index) {
+    setInput(messages[index].content);
+
+    const updated = [...messages];
+    updated.splice(index);
+
+    setMessages(updated);
+  }
+
+  const mins = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
+  const secs = String(secondsLeft % 60).padStart(2, "0");
 
   return (
     <main className="page">
-
       <section className="hero">
-
         <div className="brandMark">
           <div className="ensoCircle"></div>
         </div>
@@ -317,102 +281,62 @@ export default function Home() {
           Awareness • Meditation •
           Contemplative Intelligence
         </p>
-
       </section>
 
       <nav className="tabs">
-
-        <button
-          onClick={() => setTab("home")}
-        >
+        <button onClick={() => setTab("home")}>
           Home
         </button>
 
-        <button
-          onClick={() => setTab("chat")}
-        >
+        <button onClick={() => setTab("chat")}>
           AI Guide
         </button>
 
-        <button
-          onClick={() =>
-            setTab("meditation")
-          }
-        >
+        <button onClick={() => setTab("meditation")}>
           Meditation
         </button>
 
-        <button
-          onClick={() =>
-            setTab("journal")
-          }
-        >
+        <button onClick={() => setTab("journal")}>
           Journal
         </button>
 
-        <button
-          onClick={() =>
-            setTab("progress")
-          }
-        >
+        <button onClick={() => setTab("progress")}>
           Progress
         </button>
-
       </nav>
 
       {tab === "home" && (
-
         <section className="grid">
-
           <div className="card big">
-
-            <h2>
-              Meditation Library
-            </h2>
-
+            <h2>Meditation Library</h2>
             <p>
               Explore authentic contemplative
               methods from different traditions.
             </p>
-
           </div>
 
           <div className="card">
-
-            <h3>
-              Meditation Sessions
-            </h3>
-
-            <span className="stat">
-              {sessions}
-            </span>
-
+            <h3>Meditation Sessions</h3>
+            <span className="stat">{sessions}</span>
           </div>
 
           <div className="card">
-
-            <h3>
-              Journal Entries
-            </h3>
-
-            <span className="stat">
-              {entries.length}
-            </span>
-
+            <h3>Journal Entries</h3>
+            <span className="stat">{entries.length}</span>
           </div>
-
         </section>
-
       )}
 
       {tab === "chat" && (
-
         <section className="chatBox">
+          <div className="timerActions">
+            <button className="secondary" onClick={newChat}>
+              New Chat
+            </button>
+          </div>
 
           <div className="messages">
-
             {messages.map((msg, index) => (
-
               <div
                 key={index}
                 className={
@@ -421,57 +345,47 @@ export default function Home() {
                     : "message ai"
                 }
               >
-                {msg.content}
+                <p>{msg.content}</p>
+
+                {msg.role === "user" && (
+                  <button
+                    className="editBtn"
+                    onClick={() => editMessage(index)}
+                  >
+                    Edit
+                  </button>
+                )}
               </div>
-
             ))}
-
           </div>
 
-          <form
-            onSubmit={sendMessage}
-            className="inputArea"
-          >
-
+          <form onSubmit={sendMessage} className="inputArea">
             <input
               value={input}
-              onChange={(e) =>
-                setInput(e.target.value)
-              }
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Ask Avdhut..."
             />
 
             <button type="submit">
               Send
             </button>
-
           </form>
-
         </section>
-
       )}
 
-      {tab === "meditation" &&
-        !openedPractice && (
-
+      {tab === "meditation" && !openedPractice && (
         <section>
-
           <h2 className="sectionTitle">
             Meditation Methods
           </h2>
 
           <div className="practiceGrid">
-
             {practices.map((p) => (
-
               <button
                 key={p.title}
                 className="card practiceCard"
-                onClick={() =>
-                  setOpenedPractice(p)
-                }
+                onClick={() => setOpenedPractice(p)}
               >
-
                 <span className="tag">
                   {p.path}
                 </span>
@@ -487,33 +401,22 @@ export default function Home() {
                 <small>
                   {p.minutes} min
                 </small>
-
               </button>
-
             ))}
-
           </div>
-
         </section>
-
       )}
 
-      {tab === "meditation" &&
-        openedPractice && (
-
+      {tab === "meditation" && openedPractice && (
         <section className="practiceDetail">
-
           <button
             className="backButton"
-            onClick={() =>
-              setOpenedPractice(null)
-            }
+            onClick={() => setOpenedPractice(null)}
           >
             ← Back
           </button>
 
           <div className="card premiumTimer">
-
             <span className="tag">
               {openedPractice.path}
             </span>
@@ -535,16 +438,11 @@ export default function Home() {
             </div>
 
             <div className="timerActions">
-
               <button
                 className="primary"
-                onClick={() =>
-                  setRunning(!running)
-                }
+                onClick={() => setRunning(!running)}
               >
-                {running
-                  ? "Pause"
-                  : "Start"}
+                {running ? "Pause" : "Start"}
               </button>
 
               <button
@@ -553,55 +451,36 @@ export default function Home() {
               >
                 Restart
               </button>
-
             </div>
-
           </div>
 
           <div className="stepsBox">
-
             <h2>
               Guided Steps
             </h2>
 
-            {openedPractice.steps.map(
-              (step, index) => (
+            {openedPractice.steps.map((step, index) => (
+              <div className="stepCard" key={index}>
+                <span>
+                  {index + 1}
+                </span>
 
-                <div
-                  className="stepCard"
-                  key={index}
-                >
-
-                  <span>
-                    {index + 1}
-                  </span>
-
-                  <p>{step}</p>
-
-                </div>
-
-              )
-            )}
-
+                <p>{step}</p>
+              </div>
+            ))}
           </div>
-
         </section>
-
       )}
 
       {tab === "journal" && (
-
         <section className="journalBox">
-
           <h2>
             Awareness Journal
           </h2>
 
           <textarea
             value={journal}
-            onChange={(e) =>
-              setJournal(e.target.value)
-            }
+            onChange={(e) => setJournal(e.target.value)}
             placeholder="What did you observe today?"
           />
 
@@ -613,36 +492,22 @@ export default function Home() {
           </button>
 
           <div className="entries">
-
             {entries.map((entry, index) => (
-
-              <div
-                className="entry"
-                key={index}
-              >
-
+              <div className="entry" key={index}>
                 <small>
                   {entry.date}
                 </small>
 
                 <p>{entry.text}</p>
-
               </div>
-
             ))}
-
           </div>
-
         </section>
-
       )}
 
       {tab === "progress" && (
-
         <section className="grid">
-
           <div className="card">
-
             <h3>
               Total Sessions
             </h3>
@@ -650,11 +515,9 @@ export default function Home() {
             <span className="stat">
               {sessions}
             </span>
-
           </div>
 
           <div className="card">
-
             <h3>
               Journal Entries
             </h3>
@@ -662,13 +525,9 @@ export default function Home() {
             <span className="stat">
               {entries.length}
             </span>
-
           </div>
-
         </section>
-
       )}
-
     </main>
   );
 }
